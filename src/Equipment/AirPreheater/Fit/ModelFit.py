@@ -1,6 +1,6 @@
 from sklearn.svm import SVR
 
-from src.AirPreheater.Dao.DataHandleDao import HandleExcel
+from src.Equipment.AirPreheater.Dao import HandleExcel
 from sklearn.model_selection import train_test_split
 
 def FitModel():
