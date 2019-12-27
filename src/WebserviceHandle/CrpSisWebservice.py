@@ -1,5 +1,5 @@
 from suds.client import Client
-from src.config.Appconfig import WebserverUrl
+from src.Config.Appconfig import WebserverUrl
 
 
 class CrpSisWebApi():
