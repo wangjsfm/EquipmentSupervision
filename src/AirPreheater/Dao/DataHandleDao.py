@@ -1,7 +1,7 @@
 import  pandas as pd
 
 
-def HandleExcel(filepath):
+def HandleExcel(filepath='../../Resource/data.xlsx'):
     """
         获取excel数据并转为map，同时按照不同负荷，对数据进行分类
     :param filepath: 文件名称
@@ -36,9 +36,14 @@ def HandleExcel(filepath):
     tempMap['mw330'] = tempMap['mw330'].loc[:, ['M', 'C', 'B', 'A']]
     return  tempMap
 
+
+
 if __name__ == '__main__':
     filepath = '../../Resource/data.xlsx'
     mapData = HandleExcel(filepath)
-    print(mapData['mw400'])
+    temp = mapData['mw330']
+    data = temp.iloc[:,0:3]
+    target = temp.iloc[:,3:4]
+    print(target)
 
 
