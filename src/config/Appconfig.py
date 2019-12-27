@@ -1,0 +1,1 @@
+WebserverUrl = 'http://10.60.126.248:8098/WebService.asmx?wsdl'
