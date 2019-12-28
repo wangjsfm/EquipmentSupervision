@@ -1,76 +1,29 @@
-from src.Equipment.AirPreheater.Dao.DataHandleDao import HandleExcel,K_LIST
-import  matplotlib.pyplot as plt
 
-def ThresholdModel(so2,load):
-        """
-            根据so2浓度、负荷值确定硫份定值
-        :param so2:
-        :param load:
-        :return:硫份定值
-        """
-        return round(so2/K_LIST[load],2) # 生成定值
 
-def FitSurphur(so2,start,end):
+def LoadSo2Fit(load,so2):
     """
-    根据so2 负荷段拟合硫份
-    :param so2:
-    :param start:
-    :param end:
-    :return:
-    """
-    sulphurEnd = ThresholdModel(so2, 'mw'+str(end)) #末端点硫份
-    sulphurStart = ThresholdModel(so2, 'mw'+str(start))#首端硫份
-    k = (sulphurEnd - sulphurStart) / (end-start) #硫份变化率
-
-    laodRate = load - start #负荷变化量
-    return round(laodRate * k + sulphurStart, 2)  # y = kx + b  拟合结果
-
-
-def FittingFixedValue(so2,load):
-    """
-        根据so2 、负荷获取   入炉煤硫份
-    :param so2:
+        根据负荷、so2返回 入炉煤硫份
     :param load:
+    :param so2:
     :return:
     """
-    if load<330 & load >660:
-        #暂不处理
-        return
+    return -0.0014193*load+0.00037522*so2+0.702842
 
-    elif load>=330 & load<=400 :
-        return  FitSurphur(so2,330,400)
-
-    elif load>400 & load<460 :
-        return FitSurphur(so2, 400, 460)
-
-    elif load >= 460 & load <= 540:
-        return FitSurphur(so2, 460, 540)
-
-    elif load > 540 & load < 590:
-        return FitSurphur(so2, 540, 590)
-
-    elif load >= 590 & load <= 660:
-        return FitSurphur(so2, 590, 660)
+def SulphlurTempreturFit(sulr):
+    """
+        根据入炉煤硫份，计算冷端综合温度
+    :param sulr:
+    :return:
+    """
+    return 13.87236099*sulr+134.55304656
 
 
+def SulrPhlurAlerm(load,so2):
 
-
-
-
-
-
-if __name__ == '__main__':
-
-    so2 =6050
-    load = 540
-    # sulphur400 =ThresholdModel(s02,'mw400')
-    # sulphur330 = ThresholdModel(s02, 'mw330')
-    # print(sulphur400,sulphur330)
-    # k = (sulphur400 - sulphur330) / (400 - 330)
-    # print(k*40)
-    # print(k*40+sulphur330)
-    surphlur = FittingFixedValue(so2,load)
-    print(surphlur)
-
-
-
+    sulr = LoadSo2Fit(load,so2)#入炉煤硫份
+    alerm = round(13.87236099*sulr+134.55304656,2)  #冷端综合温度 报警定值
+    return {
+            'uplimit':alerm+2.5,
+            'dowmlimit':alerm-2.5,
+            'fitAlermValue':alerm
+    }
