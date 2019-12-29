@@ -12,14 +12,19 @@ def LoadSo2Fit(load,so2):
 def SulphlurTempreturFit(sulr):
     """
         根据入炉煤硫份，计算冷端综合温度
-    :param sulr:
+    :param sulr: 硫份
     :return:
     """
     return 13.87236099*sulr+134.55304656
 
 
 def SulrPhlurAlerm(load,so2):
-
+    """
+        根据负荷，so2,生成硫份
+    :param load:
+    :param so2:
+    :return:
+    """
     sulr = LoadSo2Fit(load,so2)#入炉煤硫份
     alerm = round(13.87236099*sulr+134.55304656,2)  #冷端综合温度 报警定值
     return {
